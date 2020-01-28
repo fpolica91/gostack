@@ -12,6 +12,8 @@ export default async (req, res, next) => {
     // promisify(function to make promise)(callback to function)
     const decoded = await promisify(jwt.verify)(token, authConfig.secret);
     // req.user is available in every route that comes after the middleware
+    // routes that would take :id as param, can now be accessed without the :id,
+    // and we can use req.userId to find the user
     req.userId = decoded.id;
     return next();
   } catch (err) {
