@@ -4,6 +4,7 @@ import databaseConfig from "../config/database";
 
 // this is the the file that connects to the database
 const models = [User];
+
 class Database {
   constructor() {
     this.init();
