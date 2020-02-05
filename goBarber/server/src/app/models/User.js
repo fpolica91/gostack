@@ -23,6 +23,11 @@ class User extends Model {
     });
     return this;
   }
+  // association  property to visuable  inside of postbird
+  static associate(models) {
+    this.belongsTo(models.File, { foreignKey: "file_id" });
+  }
+
   // checks passwords match, used in session.controller
   checkPassword(password) {
     return bcrypt.compare(password, this.password_hash);
