@@ -1,5 +1,6 @@
 import express from "express";
 import routes from "./routes";
+import path from "path";
 import "./database";
 
 class App {
@@ -10,6 +11,11 @@ class App {
   }
   middlewares() {
     this.server.use(express.json());
+    // THIS IS USED TO SERVER STATIC FILES
+    this.server.use(
+      "/files",
+      express.static(path.resolve(__dirname, "..", "tmp", "uploads"))
+    );
   }
   routes() {
     this.server.use(routes);
