@@ -2,8 +2,9 @@ import User from "../models/User";
 import File from "../models/File";
 import Appointment from "../models/Appointment";
 import Notification from "../schemas/Notification";
+import Mail from "../../lib/Mail";
 import * as Yup from "yup";
-import { startOfHour, parseISO, isBefore, format } from "date-fns";
+import { startOfHour, parseISO, isBefore, format, subHours } from "date-fns";
 class AppointmentController {
   async index(req, res) {
     const { page = 1 } = req.query;
@@ -82,6 +83,49 @@ class AppointmentController {
     await Notification.create({
       content: `Appointment for ${user.name} on ${formattedDate}`,
       user: provider_id
+    });
+
+    return res.json(appointment);
+  }
+
+  async delete(req, res) {
+    const appointment = await Appointment.findByPk(req.params.id, {
+      include: [
+        {
+          model: User,
+          as: "provider",
+          attributes: ["name", "email"]
+        },
+        {
+          model: User,
+          as: "user",
+          attributes: ["name"]
+        }
+      ]
+    });
+    if (appointment.user_id !== req.userId) {
+      return res.status(401).json({ error: "you dont have permission" });
+    }
+
+    const dateWithSub = subHours(appointment.date, 2);
+    // example appoinment time is 4:00pm
+    // dateWithSub is 2:00pm, user can only cancel up to 2 pm
+
+    if (isBefore(dateWithSub, new Date())) {
+      return res.json({ error: "Appointments can be cancelled 2 hours prior" });
+    }
+    appointment.cancelled_at = new Date();
+    await appointment.save();
+
+    await Mail.sendMail({
+      to: `${appointment.provider.name} <${appointment.provider.email}>`,
+      subject: "Cancelled Appointment",
+      template: "cancellation",
+      context: {
+        provider: appointment.provider.name,
+        user: appointment.user.name,
+        date: format(appointment.date, "MMMM, dd , 'at' H:mm'h' ")
+      }
     });
 
     return res.json(appointment);

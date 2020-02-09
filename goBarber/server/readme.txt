@@ -15,3 +15,5 @@ docker run --name mongobarber -p 27017:27017
 mongodb is used to store the notifications
 MONGO SCHEMA IN APP/SCHEMAS
 POSTGRESS MODEL IN APP/models
+
+// using handlebars for email templating
