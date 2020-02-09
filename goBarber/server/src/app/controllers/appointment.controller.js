@@ -1,14 +1,18 @@
 import User from "../models/User";
 import File from "../models/File";
 import Appointment from "../models/Appointment";
+import Notification from "../schemas/Notification";
 import * as Yup from "yup";
-import { startOfHour, parseISO, isBefore } from "date-fns";
+import { startOfHour, parseISO, isBefore, format } from "date-fns";
 class AppointmentController {
   async index(req, res) {
+    const { page = 1 } = req.query;
     const appointment = await Appointment.findAll({
       where: { user_id: req.userId, cancelled_at: null },
       order: ["date"],
       attributes: ["id", "date"],
+      limit: 20,
+      offset: (page - 1) * 20,
       include: [
         {
           model: User,
@@ -71,6 +75,15 @@ class AppointmentController {
       provider_id,
       date: hourStart
     });
+
+    const user = await User.findByPk(req.userId);
+    const formattedDate = format(hourStart, "MMMM, dd , 'at' H:mm'h' ");
+
+    await Notification.create({
+      content: `Appointment for ${user.name} on ${formattedDate}`,
+      user: provider_id
+    });
+
     return res.json(appointment);
   }
 }
