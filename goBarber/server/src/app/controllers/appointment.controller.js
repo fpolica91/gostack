@@ -2,7 +2,10 @@ import User from "../models/User";
 import File from "../models/File";
 import Appointment from "../models/Appointment";
 import Notification from "../schemas/Notification";
-import Mail from "../../lib/Mail";
+import Queue from "../../lib/Queue";
+import CancellationMail from "../jobs/cancellationMail";
+// import Mail from "../../lib/Mail";
+
 import * as Yup from "yup";
 import { startOfHour, parseISO, isBefore, format, subHours } from "date-fns";
 class AppointmentController {
@@ -11,7 +14,7 @@ class AppointmentController {
     const appointment = await Appointment.findAll({
       where: { user_id: req.userId, cancelled_at: null },
       order: ["date"],
-      attributes: ["id", "date"],
+      attributes: ["id", "date", "past", "cancellable"],
       limit: 20,
       offset: (page - 1) * 20,
       include: [
@@ -117,16 +120,20 @@ class AppointmentController {
     appointment.cancelled_at = new Date();
     await appointment.save();
 
-    await Mail.sendMail({
-      to: `${appointment.provider.name} <${appointment.provider.email}>`,
-      subject: "Cancelled Appointment",
-      template: "cancellation",
-      context: {
-        provider: appointment.provider.name,
-        user: appointment.user.name,
-        date: format(appointment.date, "MMMM, dd , 'at' H:mm'h' ")
-      }
+    await Queue.add(CancellationMail.key, {
+      appointment
     });
+
+    // await Mail.sendMail({
+    //   to: `${appointment.provider.name} <${appointment.provider.email}>`,
+    //   subject: "Cancelled Appointment",
+    //   template: "cancellation",
+    //   context: {
+    //     provider: appointment.provider.name,
+    //     user: appointment.user.name,
+    //     date: format(appointment.date, "MMMM, dd , 'at' H:mm'h' ")
+    //   }
+    // });
 
     return res.json(appointment);
   }
