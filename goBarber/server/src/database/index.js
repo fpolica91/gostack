@@ -22,7 +22,8 @@ class Database {
   // intializes mongodb
   mongo() {
     this.mongoConnection = mongoose.connect(
-      "mongodb://localhost:27017/gobarber",
+      process.env.MONGO_URL,
+      // "mongodb://localhost:27017/gobarber",
       {
         useNewUrlParser: true,
         useFindAndModify: true,
