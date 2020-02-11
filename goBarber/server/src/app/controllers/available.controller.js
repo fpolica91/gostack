@@ -28,6 +28,7 @@ class AvailableController {
       }
     });
 
+    // here yoou list available hours
     const schedule = [
       "08:00",
       "09:00",
@@ -45,19 +46,25 @@ class AvailableController {
       "21:00"
     ];
 
+    // map over available times, split them and convert to 2020-02-09T13:00:00.387Z
     const available = schedule.map(time => {
       // split data by hour and minute ["08", "00"]
       //we need format below
       // 2020-02-09T13:00:00.387Z
       const [hour, minute] = time.split(":");
       const value = setSeconds(
+        // this converts to 15:00 to  2020-02-09T13:00:00.387Z
         setMinutes(setHours(searchDate, hour), minute),
+        // zero for miliseconds
         0
       );
       return {
         time,
+        // 19:00
         value: format(value, "yyyy-MM-dd'T'HH:mm:ssxxx"),
+        // 2020-02-09T13:00:00.387Z
         available:
+          // true or false
           isAfter(value, new Date()) &&
           !appointments.find(
             app =>
@@ -70,5 +77,6 @@ class AvailableController {
     return res.json(available);
   }
 }
+// done
 
 export default new AvailableController();
