@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 import User from "../models/User";
 import Courier from "../models/Courier";
+import File from "../models/File";
 
 class CourierController {
   async store(req, res) {
@@ -97,6 +98,19 @@ class CourierController {
     }
     await courier.destroy();
     return res.status(200).json({ succes: `${courier.name} has been deleted` });
+  }
+  async index(req, res) {
+    const couriers = await Courier.findAll({
+      include: [
+        {
+          model: File,
+          attributes: ["name", "path", "url"]
+        }
+      ],
+      attributes: ["id", "name", "email"],
+      order: ["id"]
+    });
+    return res.json(couriers);
   }
 }
 
