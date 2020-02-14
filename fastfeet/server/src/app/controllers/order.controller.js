@@ -4,6 +4,7 @@ import * as Yup from "yup";
 import Courier from "../models/Courier";
 import User from "../models/User";
 import Mail from "../../lib/Mail";
+import Problem from "../models/Problems";
 
 class OrderController {
   async index(req, res) {
@@ -67,38 +68,33 @@ class OrderController {
   }
   async delete(req, res) {
     const { id } = req.params;
-    const order = await Order.findByPk(id, {
+    const problem = await Problem.findByPk(id, {
       include: [
         {
-          model: Courier,
-          as: "courier",
-          attributes: ["name", "email"]
-        },
-        {
-          model: Recipient,
-          as: "recipient",
-          attributes: ["name"]
+          model: Order,
+          as: "order",
+          attributes: ["id", "courier_id"]
         }
       ]
     });
-    if (!order) return res.json({ error: "order cannot be found" });
+
+    const courier = await Courier.findByPk(problem.order.courier_id);
+    const order = await Order.findByPk(problem.order_id);
+    await problem.destroy();
+    await order.destroy();
 
     await Mail.sendMail({
-      to: `${order.courier.name} <${order.courier.email}>`,
+      to: `${courier.name} <${courier.email}>`,
       subject: "Cancelled Order By Admin",
       template: "cancellation",
       context: {
-        courier: order.courier.name,
-        recipient: order.recipient.name,
-        product: order.product,
-        id: order.id,
+        courier: courier.name,
+        id: problem.order_id,
         date: new Date()
       }
     });
 
-    await order.destroy();
-
-    return res.json(order);
+    return res.json({ success: "order was succesfully deleted" });
   }
 }
 
