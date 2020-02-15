@@ -9,16 +9,13 @@ module.exports = {
         autoIncrement: true,
         primaryKey: true
       },
-      date: {
-        allowNull: false,
-        type: Sequelize.DATE
-      },
+
       recipient_id: {
         type: Sequelize.INTEGER,
         references: { model: "recipients", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
-        allowNull: true
+        allowNull: false
       },
       signature_id: {
         type: Sequelize.INTEGER,
@@ -26,13 +23,17 @@ module.exports = {
         onDelete: "SET NULL",
         onUpdate: "CASCADE"
       },
+      product: {
+        type: Sequelize.STRING,
+        allowNull: false
+      },
 
       courier_id: {
         type: Sequelize.INTEGER,
         references: { model: "couriers", key: "id" },
         onUpdate: "CASCADE",
         onDelete: "SET NULL",
-        allowNull: true
+        allowNull: false
       },
       cancelled_at: Sequelize.DATE,
       start_date: Sequelize.DATE,

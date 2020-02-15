@@ -4,9 +4,10 @@ import databaseConfig from "../config/database";
 import Courier from "../app/models/Courier";
 import File from "../app/models/File";
 import Recipient from "../app/models/Recipient";
+import Order from "../app/models/Order";
 
 // this is the the file that connects to the database
-const models = [User, Recipient, Courier, File];
+const models = [User, Recipient, Courier, File, Order];
 
 class Database {
   constructor() {
