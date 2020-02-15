@@ -14,6 +14,7 @@ import {
 import { Op } from "sequelize";
 import times from "../utils/time.range";
 
+// controller for couriers
 class OrderByCourierActions {
   async index(req, res) {
     const { id } = req.params;
