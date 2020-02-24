@@ -1,14 +1,25 @@
 import React, { useState, useEffect } from 'react'
+import { Link } from 'react-router-dom'
+import { Container, Form, SubmitButton, List } from './styles'
+import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa'
+import api from '../../services/api'
 
-import { Container, Form, SubmitButton } from './styles'
-
-import { FaGithubAlt, FaPlus } from 'react-icons/fa'
 const Main = () => {
-  const [newRepos, setNewRepos] = useState('')
+  const [newRepos, setNewRepos] = useState(null)
+  const [repositories, setRepositories] = useState('')
+  const [loading, setLoading] = useState(0)
 
-  const handleSubmit = e => {
+  const handleSubmit = async e => {
     e.preventDefault()
+    setLoading(1)
     console.log(newRepos)
+    const response = await api.get(`/repos/${newRepos}`)
+    const data = {
+      name: response.data.full_name
+    }
+    setRepositories([...repositories, data])
+    setNewRepos(null)
+    setLoading(0)
   }
   return (
     <Container>
@@ -20,12 +31,29 @@ const Main = () => {
         <input
           type="text"
           placeholder="Add repo"
+          value={newRepos || ''}
           onChange={e => setNewRepos(e.target.value)}
         />
-        <SubmitButton>
-          <FaPlus color="#FFF" size={14} />
+        <SubmitButton loading={loading}>
+          {loading ? (
+            <FaSpinner color="#FFF" size={14} />
+          ) : (
+            <FaPlus color="#FFF" size={14} />
+          )}
         </SubmitButton>
       </Form>
+
+      <List>
+        {repositories &&
+          repositories.map(repos => (
+            <li>
+              <span>{repos.name}</span>
+              <Link to={`/repo/${encodeURIComponent(repos.name)}`}>
+                Details
+              </Link>
+            </li>
+          ))}
+      </List>
     </Container>
   )
 }

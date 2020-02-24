@@ -1,4 +1,4 @@
-import React from 'react';
+import React from 'react'
 import { BrowserRouter, Switch, Route } from 'react-router-dom'
 import Main from './pages/Main'
 import Repo from './pages/Repo'
@@ -7,7 +7,7 @@ export default function Routes() {
     <BrowserRouter>
       <Switch>
         <Route exact path="/" component={Main} />
-        <Route exact path="/repo" component={Repo} />
+        <Route exact path="/repo/:repository" component={Repo} />
       </Switch>
     </BrowserRouter>
   )
