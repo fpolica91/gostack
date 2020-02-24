@@ -129,5 +129,9 @@ export const PageActions = styled.div`
     outline: 0;
     border:0 ;
     padding: 8px;
+    &:disabled {
+      opacity: 0.35;
+      cursor: not-allowed;
+    }
   }
 `

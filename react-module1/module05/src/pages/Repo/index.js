@@ -95,6 +95,7 @@ const Repo = ({ match }) => {
         <button disabled={page < 2} onClick={() => handlePage('back')}>
           Previous
         </button>
+        <span>Page: {page}</span>
         <button onClick={() => handlePage('next')}>Next</button>
       </PageActions>
     </Container>
