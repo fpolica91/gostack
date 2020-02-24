@@ -3,13 +3,15 @@ import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
 import api from '../../services/api'
 import PropTypes from 'prop-types'
-import { Loading, Owner, IsusueList } from './styles'
+import { Loading, Owner, IsusueList, ButtonList, PageActions } from './styles'
 import Container from '../../Container/index'
 
 const Repo = ({ match }) => {
   const [repository, setRepositories] = useState({})
   const [issues, setIssues] = useState([])
   const [loading, setLoading] = useState(1)
+  const [page, setPage] = useState(1)
+  const [filter, setFilter] = useState('open')
 
   useEffect(() => {
     async function loadRepos() {
@@ -18,7 +20,7 @@ const Repo = ({ match }) => {
         api.get(`/repos/${repoName}`),
         api.get(`/repos/${repoName}/issues`, {
           params: {
-            state: 'open',
+            state: filter,
             per_page: 5
           }
         })
@@ -29,6 +31,30 @@ const Repo = ({ match }) => {
     }
     loadRepos()
   }, [])
+
+  const loadIssues = async () => {
+    const repoName = decodeURIComponent(match.params.repository)
+    const issues = await api.get(`/repos/${repoName}/issues`, {
+      params: {
+        state: filter,
+        per_page: 5,
+        page
+      }
+    })
+    setIssues(issues.data)
+  }
+
+  // useEffect(() => {}, [setIssues])
+
+  const handleFilter = async filter => {
+    await setFilter(filter)
+    loadIssues()
+  }
+
+  const handlePage = async action => {
+    action === 'back' ? setPage(page - 1) : setPage(page + 1)
+    loadIssues()
+  }
 
   if (loading) {
     return <Loading>Loading...</Loading>
@@ -42,6 +68,12 @@ const Repo = ({ match }) => {
         <h1>{repository.name}</h1>
         <p>{repository.description}</p>
       </Owner>
+
+      <ButtonList>
+        <button onClick={() => handleFilter('open')}> Open</button>
+        <button onClick={() => handleFilter('closed')}> Closed</button>
+        <button onClick={() => handleFilter('all')}>All</button>
+      </ButtonList>
 
       <IsusueList>
         {issues.map(issue => (
@@ -59,13 +91,17 @@ const Repo = ({ match }) => {
           </li>
         ))}
       </IsusueList>
+      <PageActions>
+        <button disabled={page < 2} onClick={() => handlePage('back')}>
+          Previous
+        </button>
+        <button onClick={() => handlePage('next')}>Next</button>
+      </PageActions>
     </Container>
-  )
-
-  // return <h1>Repository : {decodeURIComponent(match.params.repository)}</h1>
+  ) // return <h1>Repository : {decodeURIComponent(match.params.repository)}</h1>
 }
 
-Repo.PropTypes = {
+Repo.propTypes = {
   match: PropTypes.shape({
     params: PropTypes.shape({
       repository: PropTypes.string

@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { Link } from 'react-router-dom'
-import { Container, Form, SubmitButton, List } from './styles'
+import { Container, Form, SubmitButton, List, NotFound } from './styles'
 import { FaGithubAlt, FaPlus, FaSpinner } from 'react-icons/fa'
 import api from '../../services/api'
 
@@ -8,18 +8,27 @@ const Main = () => {
   const [newRepos, setNewRepos] = useState(null)
   const [repositories, setRepositories] = useState('')
   const [loading, setLoading] = useState(0)
+  const [notFound, setNoFound] = useState(0)
+  const [maxReq, setMaxReq] = useState(false)
 
   const handleSubmit = async e => {
     e.preventDefault()
-    setLoading(1)
-    console.log(newRepos)
-    const response = await api.get(`/repos/${newRepos}`)
-    const data = {
-      name: response.data.full_name
+    setLoading(false)
+    setMaxReq(0)
+    try {
+      const response = await api.get(`/repos/${newRepos}`)
+      const data = {
+        name: response.data.full_name
+      }
+      setRepositories([...repositories, data])
+      setNewRepos(null)
+      setLoading(0)
+      setNoFound(0)
+    } catch (err) {
+      setLoading(0)
+      setNoFound(1)
+      setMaxReq(true)
     }
-    setRepositories([...repositories, data])
-    setNewRepos(null)
-    setLoading(0)
   }
   return (
     <Container>
@@ -27,7 +36,7 @@ const Main = () => {
         <FaGithubAlt />
         Repos
       </h1>
-      <Form onSubmit={handleSubmit}>
+      <Form onSubmit={handleSubmit} notFound={notFound}>
         <input
           type="text"
           placeholder="Add repo"
@@ -54,6 +63,7 @@ const Main = () => {
             </li>
           ))}
       </List>
+      <div>{maxReq && <p>Max Requests Reached</p>}</div>
     </Container>
   )
 }

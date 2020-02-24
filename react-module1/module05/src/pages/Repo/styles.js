@@ -41,6 +41,29 @@ export const Owner = styled.header`
   }
 `
 
+export const ButtonList = styled.div`
+  margin-top: 10px;
+  display: flex;
+  justify-content: center;
+  button {
+    &:hover{
+      opacity: 0.7;
+      border: 1px solid #000;
+    }
+    background: #FFFF
+    font-size: 12px;
+    color: #999;
+    width: 60px;
+    height: 30px;
+    border-radius: 4px;
+    justify-content: center;
+    align-content: center;
+    & + button {
+      margin-left: 10px;
+    }
+  }
+`
+
 export const IsusueList = styled.ul`
   padding-top: 30px;
   margin-top: 30px;
@@ -91,5 +114,20 @@ export const IsusueList = styled.ul`
         color: #999;
       }
     }
+  }
+`
+export const PageActions = styled.div`
+  padding-top: 15px;
+  display: flex;
+  just-content: space-between;
+  align-items: center;
+  font-size: 12px;
+
+  button{
+    transition: opacity: 0.25s ease-out;
+    border-radius: 4px;
+    outline: 0;
+    border:0 ;
+    padding: 8px;
   }
 `

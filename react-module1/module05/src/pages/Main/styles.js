@@ -29,6 +29,13 @@ export const Form = styled.form`
     border-radius: 4px;
     font-size: 16px;
   }
+  ${props =>
+    props.notFound &&
+    css`
+      input {
+        border: 1px solid #ff0000;
+      }
+    `}
 `
 
 const rotate = keyframes`
