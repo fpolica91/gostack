@@ -17,7 +17,9 @@ function App() {
     }
   }, [])
 
- 
+  // commentes
+
+  // commmnets
 
   useEffect(() => {
     localStorage.setItem('techs', JSON.stringify(techs))
