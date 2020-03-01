@@ -17,7 +17,7 @@ function App() {
     }
   }, [])
 
-// gag
+
 
   useEffect(() => {
     localStorage.setItem('techs', JSON.stringify(techs))
