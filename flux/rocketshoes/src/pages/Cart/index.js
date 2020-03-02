@@ -9,13 +9,20 @@ import {
   MdDelete
 } from 'react-icons/md';
 
-const Cart = ({ cart, dispatch, removeFromCart }) => {
+const Cart = ({ cart, removeFromCart, updateAmount }) => {
   function handleDelete(product) {
     removeFromCart(product);
     // dispatch({
     //   type: 'REMOVE_FROM_CART',
     //   product
     // });
+  }
+
+  function increment(product) {
+    updateAmount(product.id, product.amount + 1);
+  }
+  function decrement(product) {
+    updateAmount(product.id, product.amount - 1);
   }
 
   return (
@@ -42,11 +49,11 @@ const Cart = ({ cart, dispatch, removeFromCart }) => {
               </td>
               <td>
                 <div>
-                  <button type="button">
+                  <button type="button" onClick={() => decrement(prod)}>
                     <MdRemoveCircleOutline size={20} color="#999" />
                   </button>
                   <input type="number" readOnly value={prod.amount} />
-                  <button type="button">
+                  <button type="button" onClick={() => increment(prod)}>
                     <MdAddCircleOutline size={20} color="#7150c1" />
                   </button>
                 </div>
