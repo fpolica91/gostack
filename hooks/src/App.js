@@ -18,6 +18,7 @@ function App() {
   }, [])
 
 // gag
+// dsfagr
 
   useEffect(() => {
     localStorage.setItem('techs', JSON.stringify(techs))
