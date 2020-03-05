@@ -9,7 +9,9 @@ import {
   MdDelete
 } from 'react-icons/md';
 
-const Cart = ({ cart, removeFromCart, updateAmount }) => {
+import { price } from '../../util/format';
+
+const Cart = ({ cart, removeFromCart, updateAmount, total }) => {
   function handleDelete(product) {
     removeFromCart(product);
     // dispatch({
@@ -59,7 +61,7 @@ const Cart = ({ cart, removeFromCart, updateAmount }) => {
                 </div>
               </td>
               <td>
-                <strong>$20</strong>
+                <strong>{prod.subtotal}</strong>
               </td>
 
               <td>
@@ -75,7 +77,7 @@ const Cart = ({ cart, removeFromCart, updateAmount }) => {
         <button type="button">Check Out</button>
         <Total>
           <span>Total</span>
-          <strong>$20</strong>
+          <strong>{total}</strong>
         </Total>
       </footer>
     </Container>
@@ -86,7 +88,15 @@ const mapDispatchToProps = dispatch =>
   bindActionCreators(CartActions, dispatch);
 
 const mapStateToProps = state => ({
-  cart: state.cart
+  cart: state.cart.map(product => ({
+    ...product,
+    subtotal: price(product.price * product.amount)
+  })),
+  total: price(
+    state.cart.reduce((total, product) => {
+      return total + product.price * product.amount;
+    }, 0)
+  )
 });
 
 export default connect(mapStateToProps, mapDispatchToProps)(Cart);

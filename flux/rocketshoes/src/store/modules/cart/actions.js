@@ -5,10 +5,19 @@ export function removeFromCart(product) {
   };
 }
 
-export function addToCart(product) {
+// THIS IS WHAT SAGA CALLS AFTER THE API CALL
+export function addToCartSucess(product) {
   return {
-    type: 'ADD_TO_CART',
+    type: '@cart/ADD_SUCCESS',
     product
+  };
+}
+
+// THIS CALLS THE SAGA, IT FIRES WHEN THE USER CLICKS THE ADD BUTTON
+export function addToCartRequest(id) {
+  return {
+    type: '@cart/ADD_REQUEST',
+    id
   };
 }
 
