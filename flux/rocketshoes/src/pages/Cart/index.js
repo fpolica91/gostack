@@ -1,19 +1,19 @@
-import React from 'react';
-import { Container, ProductTable, Total } from './styles';
-import { bindActionCreators } from 'redux';
-import * as CartActions from '../../store/modules/cart/actions';
-import { connect } from 'react-redux';
+import React from 'react'
+import { Container, ProductTable, Total } from './styles'
+import { bindActionCreators } from 'redux'
+import * as CartActions from '../../store/modules/cart/actions'
+import { connect } from 'react-redux'
 import {
   MdRemoveCircleOutline,
   MdAddCircleOutline,
   MdDelete
-} from 'react-icons/md';
+} from 'react-icons/md'
 
-import { price } from '../../util/format';
+import { price } from '../../util/format'
 
-const Cart = ({ cart, removeFromCart, updateAmount, total }) => {
+const Cart = ({ cart, removeFromCart, updateAmountRequest, total }) => {
   function handleDelete(product) {
-    removeFromCart(product);
+    removeFromCart(product)
     // dispatch({
     //   type: 'REMOVE_FROM_CART',
     //   product
@@ -21,10 +21,10 @@ const Cart = ({ cart, removeFromCart, updateAmount, total }) => {
   }
 
   function increment(product) {
-    updateAmount(product.id, product.amount + 1);
+    updateAmountRequest(product.id, product.amount + 1)
   }
   function decrement(product) {
-    updateAmount(product.id, product.amount - 1);
+    updateAmountRequest(product.id, product.amount - 1)
   }
 
   return (
@@ -81,11 +81,10 @@ const Cart = ({ cart, removeFromCart, updateAmount, total }) => {
         </Total>
       </footer>
     </Container>
-  );
-};
+  )
+}
 
-const mapDispatchToProps = dispatch =>
-  bindActionCreators(CartActions, dispatch);
+const mapDispatchToProps = dispatch => bindActionCreators(CartActions, dispatch)
 
 const mapStateToProps = state => ({
   cart: state.cart.map(product => ({
@@ -94,9 +93,9 @@ const mapStateToProps = state => ({
   })),
   total: price(
     state.cart.reduce((total, product) => {
-      return total + product.price * product.amount;
+      return total + product.price * product.amount
     }, 0)
   )
-});
+})
 
-export default connect(mapStateToProps, mapDispatchToProps)(Cart);
+export default connect(mapStateToProps, mapDispatchToProps)(Cart)
