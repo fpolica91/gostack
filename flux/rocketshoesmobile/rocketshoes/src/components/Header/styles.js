@@ -36,9 +36,11 @@ export const ItemCount = styled.Text`
   text-align: center;
   top: -8px;
   padding: 2px;
-  border-radius: 9px;
+  border-radius: 8px;
   font-size: 12px;
   right: -8px;
   position: absolute;
   color: #fff;
+  overflow: hidden;
+  background: #7159c1;
 `;

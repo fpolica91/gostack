@@ -12,11 +12,14 @@ import {
   ButtonCount,
   ButtonContent,
 } from './styles';
+import {price} from '../../utils/format';
+import {bindActionCreators} from 'redux';
 
 import Icon from 'react-native-vector-icons/MaterialIcons';
+import * as CartActions from '../../store/modules/cart/actions';
 import {connect} from 'react-redux';
 
-const Home = ({navigation, dispatch}) => {
+const Home = ({navigation, addItemToCartRequest}) => {
   const [products, setProducts] = useState([]);
 
   useEffect(() => {
@@ -29,10 +32,12 @@ const Home = ({navigation, dispatch}) => {
   };
 
   const addToCart = product => {
-    dispatch({
-      type: '@cart/ADD_TO_CART',
-      product,
-    });
+    addItemToCartRequest(product.id);
+    // bottom shows what you do before using mapDispatchtoprops
+    // dispatch({
+    //   type: '@cart/ADD_TO_CART',
+    //   product,
+    // });
   };
 
   return (
@@ -45,7 +50,7 @@ const Home = ({navigation, dispatch}) => {
           <Container>
             <ProductImage source={{uri: item.image}} />
             <Title>{item.title}</Title>
-            <Price>{item.price}</Price>
+            <Price>{price(item.price)}</Price>
             <AddButton onPress={() => addToCart(item)}>
               <ButtonContent>
                 <ButtonCount>0</ButtonCount>
@@ -60,7 +65,12 @@ const Home = ({navigation, dispatch}) => {
   );
 };
 
-export default connect()(Home);
+const mapDispatchToProps = dispatch =>
+  bindActionCreators(CartActions, dispatch);
+export default connect(
+  null,
+  mapDispatchToProps,
+)(Home);
 
 Home.navigationOptions = {
   title: 'Home',

@@ -98,3 +98,16 @@ export const CheckOutText = styled.Text`
   font-weight: bold;
   font-size: 16px;
 `;
+
+export const EmptyContainer = styled.View`
+  background: #fff;
+  justify-content: center;
+  align-items: center;
+  padding: 20px;
+`;
+
+export const EmptyText = styled.Text`
+  font-size: 24px;
+  font-weight: bold;
+  margin-top: 10px;
+`;
