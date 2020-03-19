@@ -1,10 +1,10 @@
 import { Switch } from 'react-router-dom'
 import React from 'react'
 import Route from './Route'
-import Dashboard from '../pages/Dashboard/index'
-import SignIn from '../pages/Sigin/index'
-import Signup from '../pages/Signup/index'
-import Profile from '../pages/Profile/index'
+import Dashboard from '~/pages/Dashboard/index'
+import SignIn from '~/pages/Sigin/index'
+import Signup from '~/pages/Signup/index'
+import Profile from '~/pages/Profile/index'
 
 export default function Routes() {
   return (
