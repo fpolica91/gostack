@@ -62,6 +62,7 @@ class UserController {
       include: [
         {
           model: File,
+          // avatar is the as: for referencing
           as: 'avatar',
           attributes: ['id', 'path', 'url']
         }
