@@ -5,6 +5,7 @@ import File from '../models/File'
 import { Op } from 'sequelize'
 
 class CourierController {
+  // create
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
