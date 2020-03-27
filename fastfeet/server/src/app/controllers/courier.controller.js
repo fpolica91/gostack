@@ -42,7 +42,7 @@ class CourierController {
       throw new Error(err)
     }
   }
-
+  // update
   async update(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string(),
