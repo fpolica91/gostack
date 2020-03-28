@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import api from '~/services/api'
+import history from '~/services/history'
 import { Container, Table, Controls, Avatar } from './styles'
 import { MdMoreHoriz, MdAdd } from 'react-icons/md'
 
@@ -19,11 +20,15 @@ export default function Couriers() {
     loadCouriers()
   }, [query])
 
+  function handleNavigation() {
+    history.push('courier/new')
+  }
+
   return (
     <Container>
       <Controls>
         <div>
-          <h2>Order management</h2>
+          <h2>Courier management</h2>
           <input
             type="text"
             value={query}
@@ -31,7 +36,7 @@ export default function Couriers() {
             placeholder="Search orders"
           />
         </div>
-        <button onClick={() => {}}>
+        <button onClick={handleNavigation}>
           <MdAdd color="#FFF" size={16} />
           Add
         </button>
@@ -49,7 +54,7 @@ export default function Couriers() {
         </thead>
         <tbody>
           {couriers.map(courier => (
-            <tr>
+            <tr key={courier.id}>
               <td>
                 <div>{courier.id}</div>
               </td>
