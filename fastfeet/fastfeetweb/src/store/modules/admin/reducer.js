@@ -1,7 +1,18 @@
 import produce from 'immer'
 
-const INITIAL_STATE = {}
+const INITIAL_STATE = {
+  profile: null
+}
 
 export default function admin(state = INITIAL_STATE, action) {
-  return state
+  return produce(state, draft => {
+    switch (action.type) {
+      case `@auth/SIGN_IN_SUCCESS`: {
+        draft.profile = action.payload.user
+        break
+      }
+      default:
+        return state
+    }
+  })
 }

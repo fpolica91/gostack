@@ -1,10 +1,11 @@
 import React from 'react'
 import { Container, Content, Profile } from './styles'
 import { useSelector } from 'react-redux'
-import { Link } from 'react-router-dom'
+import { NavLink } from 'react-router-dom'
 import logo from '~/assets/fastfeet-logo.png'
 
 export default function Header() {
+  const admin = useSelector(state => state.admin.profile)
   return (
     <Container>
       <Content>
@@ -12,13 +13,13 @@ export default function Header() {
           <img src={logo} alt="fastfeetLogo" />
         </nav>
         <aside>
-          <Link to="/orders">Orders</Link>
-          <Link to="/couriers">Couriers</Link>
-          <Link to="/recipients">Recipients</Link>
-          <Link to="/problems">Problems</Link>
+          <NavLink to="/orders">Orders</NavLink>
+          <NavLink to="/couriers">Couriers</NavLink>
+          <NavLink to="/recipients">Recipients</NavLink>
+          <NavLink to="/problems">Problems</NavLink>
           <Profile>
             <div>
-              <strong>FastFeet Admin</strong>
+              <strong>{admin.name}</strong>
             </div>
           </Profile>
         </aside>

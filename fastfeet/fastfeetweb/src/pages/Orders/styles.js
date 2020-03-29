@@ -1,8 +1,140 @@
-import styled from 'styled-components'
+import styled, { css } from 'styled-components'
 
 export const Container = styled.div`
+  height: 100%;
+  padding: 0 50px;
+  overflow: hidden;
   display: flex;
-  justify-content: center;
+  max-width: 900px;
+  flex-direction: column;
 `
 
-export const Table = styled.table``
+export const Controls = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  div {
+    display: flex;
+    flex-direction: column;
+    margin: 30px 0;
+
+    h2 {
+      color: #000000;
+    }
+    input {
+      margin-top: 20px;
+      background: #ffffff;
+      width: 170px;
+      &::placeholder {
+        text-align: center;
+      }
+    }
+  }
+
+  button {
+    margin-top: 30px;
+    background: #7d40e7;
+    height: 36px;
+    width: 142px;
+    color: #fff;
+    border-radius: 4px;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+`
+
+export const Table = styled.table`
+    border-collapse:separate; 
+    border-spacing:0 12px;
+  /* border-collapse: collapse; */
+   
+  thead th {
+    color: #444444;
+    text-align: left;
+    padding: 12px;
+  }
+  tbody {
+    padding: 12px;
+
+    tr {
+      background: #fff;
+
+      td {
+        color: #666666;
+        padding: 12px;
+       
+        
+        
+        button {
+        border: 0;
+        }
+        svg {
+          margin-left: 12px;  
+        }
+       
+        }
+      }
+    }
+  }
+`
+
+export const Span = styled.div`
+  background: ${props =>
+    props.statusColor === 'delivered'
+      ? '#DFF0DF'
+      : 'pending'
+      ? '#F0F0DF'
+      : 'retrieved'
+      ? '#BAD2FF'
+      : '##FAB0B0'} };
+  position: relative;
+  padding: 3px 12px;
+  width: 85px;
+
+  /* padding-right: 2px; */
+  text-transform: uppercase;
+  font-size: 12px;
+  color: ${props =>
+    props.statusColor === 'delivered'
+      ? '#2ca42b'
+      : 'pending'
+      ? '#C1BC35'
+      : 'retrieved'
+      ? '#4D85EE'
+      : '#DE3B3B'} }
+  border-radius: 10px;
+
+  ${props =>
+    props.statusColor &&
+    css`
+      :before {
+        content: '';
+        position: absolute;
+        width: 8px;
+        left: 0.2em;
+        top: 0.5em;
+        height: 8px;
+        background: ${props =>
+          props.statusColor === 'delivered'
+            ? '#2ca42b'
+            : 'pending'
+            ? '#C1BC35'
+            : 'retrieved'
+            ? '#4D85EE'
+            : '#DE3B3B'};
+        border-radius: 50%;
+      }
+    `}
+`
+
+export const Courier = styled.div`
+  position: relative;
+
+  span {
+    margin-right: 3px;
+    background: #f4effc;
+    border-radius: 50%;
+    color: #a28fd0;
+  }
+`
