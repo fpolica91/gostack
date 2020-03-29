@@ -3,13 +3,14 @@ import { Route, Redirect } from 'react-router-dom'
 import PropTypes from 'prop-types'
 import AuthLayout from '../pages/layouts/auth/index'
 import DefaultLayout from '../pages/layouts/_default/index'
+import { store } from '~/store'
 
 export default function RouterWrapper({
   component: Component,
   isPrivate = false,
   ...rest
 }) {
-  const signed = false
+  const { signed } = store.getState().auth
   const Layout = signed ? DefaultLayout : AuthLayout
 
   if (!signed && isPrivate) {
