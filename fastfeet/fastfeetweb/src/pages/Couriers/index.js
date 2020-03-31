@@ -13,7 +13,7 @@ export default function Couriers() {
       const response = await api.get(`/couriers?name=${query}`)
       const courierList = response.data.map(courier => ({
         ...courier,
-        image: courier.File ? courier.File.url : null
+        image: courier.avatar ? courier.avatar.url : null
       }))
       setCouriers(courierList)
     }

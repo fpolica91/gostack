@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import api from '~/services/api'
+import history from '~/services/history'
 import { Container, Table, Span, Courier, Controls } from './styles'
 import { MdMoreHoriz, MdAdd } from 'react-icons/md'
 
@@ -31,6 +32,10 @@ export default function Orders() {
     fetchOrders()
   }, [query])
 
+  function handleNavigation() {
+    history.push('/order/new')
+  }
+
   return (
     <Container>
       <Controls>
@@ -43,7 +48,7 @@ export default function Orders() {
             value={query}
           />
         </div>
-        <button onClick={() => {}}>
+        <button onClick={handleNavigation}>
           <MdAdd color="#FFF" size={16} />
           Add
         </button>
