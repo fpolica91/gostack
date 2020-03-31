@@ -87,7 +87,7 @@ class CourierController {
       name
     })
   }
-
+  // DELETE
   async delete(req, res) {
     const admin = await User.findByPk(req.userId)
     if (!admin) {
