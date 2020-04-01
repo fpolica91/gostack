@@ -100,6 +100,7 @@ class CourierController {
     await courier.destroy()
     return res.status(200).json({ succes: `${courier.name} has been deleted` })
   }
+  // added  index
   async index(req, res) {
     const { name } = req.query
     const couriers = await Courier.findAll({
