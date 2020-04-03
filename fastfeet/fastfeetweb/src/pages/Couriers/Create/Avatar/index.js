@@ -17,7 +17,7 @@ export default function Avatar() {
         path: 'dataset.file'
       })
     }
-  }, [ref, registerField])
+  }, [defaultValue, ref, registerField])
 
   async function handleChange(e) {
     const data = new FormData()

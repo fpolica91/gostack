@@ -11,11 +11,13 @@ const schema = Yup.object().shape({
   name: Yup.string().required('Please specify your name'),
   email: Yup.string()
     .email('Insert a valid email')
-    .required('Email is required')
+    .required('Email is required'),
+  file_id: Yup.number()
 })
 
 export default function Create() {
   async function handleSubmit({ name, email, file_id }) {
+    console.log(name, email, file_id)
     try {
       await api.post(`/couriers`, { email, name, file_id })
       toast.success('Order succesfully created')

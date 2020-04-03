@@ -82,7 +82,7 @@ export const Table = styled.table`
 `
 
 export const Span = styled.div`
-  background: ${props =>
+  background: ${(props) =>
     props.statusColor === 'delivered'
       ? '#DFF0DF'
       : 'pending'
@@ -97,7 +97,7 @@ export const Span = styled.div`
   /* padding-right: 2px; */
   text-transform: uppercase;
   font-size: 12px;
-  color: ${props =>
+  color: ${(props) =>
     props.statusColor === 'delivered'
       ? '#2ca42b'
       : 'pending'
@@ -107,7 +107,7 @@ export const Span = styled.div`
       : '#DE3B3B'} }
   border-radius: 10px;
 
-  ${props =>
+  ${(props) =>
     props.statusColor &&
     css`
       :before {
@@ -117,7 +117,7 @@ export const Span = styled.div`
         left: 0.2em;
         top: 0.5em;
         height: 8px;
-        background: ${props =>
+        background: ${(props) =>
           props.statusColor === 'delivered'
             ? '#2ca42b'
             : 'pending'

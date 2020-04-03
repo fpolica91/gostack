@@ -1,7 +1,7 @@
 import React, { useEffect, useRef } from 'react'
 import { useField } from '@unform/core'
 
-export default function Input({ name, ...rest }) {
+export default function Input({ name, label, ...rest }) {
   const inputRef = useRef(null)
   const { fieldName, defaultValue = '', registerField } = useField(name)
 
@@ -9,9 +9,18 @@ export default function Input({ name, ...rest }) {
     registerField({
       name: fieldName,
       ref: inputRef.current,
-      path: 'value'
+      path: 'value',
     })
   }, [fieldName, registerField])
 
-  return <input ref={inputRef} defaultValue={defaultValue} {...rest} />
+  return (
+    <>
+      <input
+        ref={inputRef}
+        defaultValue={defaultValue}
+        {...rest}
+        placeholder={label}
+      />
+    </>
+  )
 }
