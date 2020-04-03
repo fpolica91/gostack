@@ -14,7 +14,7 @@ export const Container = styled.div`
     /* flex-direction: column; */
     margin-top: 30px;
 
-    input {
+    select {
       background: rgba(0, 0, 0, 0.1) !important;
       border: 0;
       border-radius: 4px;

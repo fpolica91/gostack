@@ -1,45 +1,24 @@
-import React, { useEffect, useState, useMemo } from 'react'
+import React from 'react'
+import { Form } from '@unform/web'
+import Select from './Components/Select'
+import Input from './Components/Input'
 import api from '~/services/api'
-// import AsyncSelect from 'react-select/async'
-import Select from 'react-select'
-import { Form } from '@rocketseat/unform'
-import { Container } from './styles'
+import history from '~/services/history'
 
 export default function CreateOrder() {
-  const [couriers, setCourriers] = useState([])
-  const [courier, setCourier] = useState({})
-
-  // const [recipients, setRecipients] = useState([])
-
-  useEffect(() => {
-    async function loadItems() {
-      const response = await api.get(`/couriers?name=`)
-      setCourriers(response.data)
-    }
-    loadItems()
-  }, [])
-
-  const defaultOptions = useMemo(
-    () =>
-      couriers.map(c => ({
-        label: c.name,
-        value: c.id
-      })),
-    [couriers]
-  )
+  async function handleSubmit({ courier_id, recipient_id, product }) {
+    await api.post('orders', { recipient_id, courier_id, product })
+    history.push('/orders')
+  }
 
   return (
     <>
-      <Container>
-        <Form>
-          <Select
-            value={courier}
-            options={defaultOptions}
-            onChange={value => setCourier(value)}
-          />
-          <button>Submit</button>
-        </Form>
-      </Container>
+      <Form onSubmit={handleSubmit}>
+        <Select name="courier_id" path={`/couriers?name`} />
+        <Select name="recipient_id" path={`recipients/?name`} />
+        <Input name="product" />
+        <button>Submit</button>
+      </Form>
     </>
   )
 }
