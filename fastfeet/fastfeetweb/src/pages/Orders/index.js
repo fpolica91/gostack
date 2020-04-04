@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import api from '~/services/api'
 import history from '~/services/history'
-import { Container, Table, Span, Courier, Controls, Scroll } from './styles'
+import { Container, Table, Span, Courier, Controls } from './styles'
 import { MdMoreHoriz, MdAdd } from 'react-icons/md'
 
 export default function Orders() {
@@ -53,56 +53,54 @@ export default function Orders() {
           Add
         </button>
       </Controls>
-      <Scroll>
-        <Table>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Recipient</th>
-              <th>Courier</th>
-              <th>City</th>
-              <th>State</th>
-              <th>Status</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
+      <Table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>Recipient</th>
+            <th>Courier</th>
+            <th>City</th>
+            <th>State</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
 
-          <tbody>
-            {orders.map((order) => (
-              <tr key={order.id}>
-                <td>
-                  <span>#{order.id}</span>
-                </td>
-                <td>
-                  <span>{order.recipient.name}</span>
-                </td>
-                <td>
-                  <Courier>
-                    <span>{order.courierInitials}</span>
-                    {order.courier.name}
-                  </Courier>
-                </td>
-                <td>
-                  <span>Miami</span>
-                </td>
-                <td>
-                  <span>FL</span>
-                </td>
-                <td>
-                  <Span statusColor={order.status}>
-                    <span>{order.status}</span>
-                  </Span>
-                </td>
-                <td>
-                  <button type="button">
-                    <MdMoreHoriz size={16} />
-                  </button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </Table>
-      </Scroll>
+        <tbody>
+          {orders.map((order) => (
+            <tr key={order.id}>
+              <td>
+                <span>#{order.id}</span>
+              </td>
+              <td>
+                <span>{order.recipient.name}</span>
+              </td>
+              <td>
+                <Courier>
+                  <span>{order.courierInitials}</span>
+                  {order.courier.name}
+                </Courier>
+              </td>
+              <td>
+                <span>Miami</span>
+              </td>
+              <td>
+                <span>FL</span>
+              </td>
+              <td>
+                <Span statusColor={order.status}>
+                  <span>{order.status}</span>
+                </Span>
+              </td>
+              <td>
+                <button type="button">
+                  <MdMoreHoriz size={16} />
+                </button>
+              </td>
+            </tr>
+          ))}
+        </tbody>
+      </Table>
     </Container>
   )
 }

@@ -5,7 +5,7 @@ import { NavLink } from 'react-router-dom'
 import logo from '~/assets/fastfeet-logo.png'
 
 export default function Header() {
-  const admin = useSelector(state => state.admin.profile)
+  const admin = useSelector((state) => state.admin.profile)
   return (
     <Container>
       <Content>
@@ -16,7 +16,7 @@ export default function Header() {
           <NavLink to="/orders">Orders</NavLink>
           <NavLink to="/couriers">Couriers</NavLink>
           <NavLink to="/recipients">Recipients</NavLink>
-          <NavLink to="/problems">Problems</NavLink>
+          <NavLink to="/probs">Problems</NavLink>
           <Profile>
             <div>
               <strong>{admin.name}</strong>

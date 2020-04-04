@@ -12,7 +12,7 @@ const schema = Yup.object().shape({
   email: Yup.string()
     .email('Insert a valid email')
     .required('Email is required'),
-  file_id: Yup.number()
+  file_id: Yup.number(),
 })
 
 export default function Create() {
@@ -36,7 +36,9 @@ export default function Create() {
             <SaveButton type="submit" form="my-form">
               Save
             </SaveButton>
-            <ReturnButton>Return</ReturnButton>
+            <ReturnButton onClick={() => history.push('/couriers')}>
+              Return
+            </ReturnButton>
           </div>
         </div>
       </Controls>
