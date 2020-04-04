@@ -1,4 +1,5 @@
 import styled, { css } from 'styled-components'
+import PerfectScrollBar from 'react-perfect-scrollbar'
 
 export const Container = styled.div`
   height: 100%;
@@ -9,6 +10,11 @@ export const Container = styled.div`
   /* justify-content: center; */
   flex-direction: column;
   /* align-items: center; */
+`
+
+export const Scroll = styled(PerfectScrollBar)`
+  max-height: 550px;
+  padding: 5px 20px;
 `
 
 export const Controls = styled.div`
