@@ -28,12 +28,19 @@ routes.put('/couriers/:id', CourierController.update)
 routes.delete('/couriers/:id', CourierController.delete)
 routes.get('/couriers', CourierController.index)
 
+//Problems
+routes.get('/problems', ProblemController.index)
+
 routes.post('/recipient', RecipientController.store)
 routes.put('/update/:id', RecipientController.update)
+routes.delete('/recipient/:id', RecipientController.delete)
 
 // ORDERS HANDLED BY ADMIN
 routes.get('/orders', OrderController.index)
 routes.post('/orders', OrderController.store)
+routes.put('/orders/:id', OrderController.update)
+routes.delete('/orders/:id', OrderController.delete)
+
 routes.delete('/problems/:id', OrderController.delete)
 
 //GET RECIPIENTS

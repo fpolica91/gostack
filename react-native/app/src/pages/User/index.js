@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import {ActivityIndicator} from 'react-native'
 import {
   Container,
   Header,
@@ -14,26 +15,28 @@ import {
 } from './styles';
 import api from '../../services/api';
 
-// import { Container } from './styles';
-
 export default function User(props) {
   const [stars, setStarred] = useState([]);
   const [page, setPage] = useState(1);
+  const [loading, setLoading] = useState(false)
 
   useEffect(() => {
     loadUser();
   }, []);
 
-  const loadUser = async page => {
+  const loadUser = async (page = 1) => {
+    console.tron.log('HEREEE')
     const { navigation } = props;
     const user = navigation.getParam('user');
+    setLoading(true)
     const response = await api.get(`/users/${user.login}/starred?page=${page}`);
-    setStarred(response.data);
+    page >= 2 ? (setStarred([...stars, ...response.data])) : (setStarred(response.data))
+    // setStarred(response.data);
   };
 
   const handlePagination = async () => {
-    await setPage(page + 1);
-    loadUser();
+      setPage(page +1)
+      loadUser(page)
   };
 
   const user = props.navigation.getParam('user');
@@ -57,7 +60,7 @@ export default function User(props) {
           </Starred>
         )}
         onEndReached={handlePagination}
-        onEndReachedThreshold={0.5}
+        onEndReachedThreshold={0.2}
       />
     </Container>
   );

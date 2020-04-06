@@ -8,9 +8,9 @@ class RecipientController {
     const reciepient = await Recipient.findAll({
       where: {
         name: {
-          [Op.iLike]: `%${name}%`
-        }
-      }
+          [Op.iLike]: `%${name}%`,
+        },
+      },
     })
     return res.json(reciepient)
   }
@@ -22,7 +22,7 @@ class RecipientController {
       number: Yup.string().required(),
       state: Yup.string().required(),
       city: Yup.string().required(),
-      zip: Yup.number()
+      zip: Yup.number(),
     })
 
     if (!(await schema.isValid(req.body))) {
@@ -30,7 +30,7 @@ class RecipientController {
     }
 
     const alreadyExist = await Recipient.findOne({
-      where: { number: req.body.number }
+      where: { number: req.body.number },
     })
     if (alreadyExist) res.json({ error: 'you already have this user' })
 
@@ -53,8 +53,14 @@ class RecipientController {
       street,
       state,
       zip,
-      number
+      number,
     })
+  }
+  async delete(req, res) {
+    const { id } = req.params
+    const recipient = await Recipient.findByPk(id)
+    await recipient.destroy()
+    return res.json('Recipient delted succesfully')
   }
 }
 

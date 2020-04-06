@@ -15,26 +15,25 @@ class OrderController {
       where: {
         cancelled_at: null,
         product: {
-          [Op.iLike]: `%${product}%`
-        }
+          [Op.iLike]: `%${product}%`,
+        },
       },
       include: [
         {
           model: Recipient,
           as: 'recipient',
-          attributes: ['id', 'name', 'street', 'state', 'city']
+          attributes: ['id', 'name', 'street', 'state', 'city'],
         },
         {
           model: Courier,
           as: 'courier',
-          attributes: ['id', 'name', 'email']
-        }
-      ]
+          attributes: ['id', 'name', 'email'],
+        },
+      ],
     })
 
     return res.json(orders)
   }
-
   async store(req, res) {
     // check user is admin
     const admin = await User.findByPk(req.userId)
@@ -45,7 +44,7 @@ class OrderController {
     const schema = Yup.object().shape({
       product: Yup.string().required(),
       courier_id: Yup.number().required(),
-      recipient_id: Yup.number().required()
+      recipient_id: Yup.number().required(),
     })
 
     if (!(await schema.isValid(req.body))) {
@@ -61,7 +60,7 @@ class OrderController {
     const order = await Order.create({
       courier_id,
       recipient_id,
-      product
+      product,
     })
 
     await Mail.sendMail({
@@ -72,45 +71,75 @@ class OrderController {
         courier: courier.name,
         recipient: recipient.name,
         product: product,
-        date: new Date()
-      }
+        date: new Date(),
+      },
     })
 
     return res.json({
       recipient_id,
       courier_id,
-      product
+      product,
     })
   }
+  // async delete(req, res) {
+  //   const { id } = req.params
+  //   const problem = await Problem.findByPk(id, {
+  //     include: [
+  //       {
+  //         model: Order,
+  //         as: 'order',
+  //         attributes: ['id', 'courier_id'],
+  //       },
+  //     ],
+  //   })
+
+  //   const courier = await Courier.findByPk(problem.order.courier_id)
+  //   const order = await Order.findByPk(problem.order_id)
+  //   await problem.destroy()
+  //   await order.destroy()
+
+  //   await Mail.sendMail({
+  //     to: `${courier.name} <${courier.email}>`,
+  //     subject: 'Cancelled Order By Admin',
+  //     template: 'cancellation',
+  //     context: {
+  //       courier: courier.name,
+  //       id: problem.order_id,
+  //       date: new Date(),
+  //     },
+  //   })
+
+  //   return res.json({ success: 'order was succesfully deleted' })
+  // }
+
   async delete(req, res) {
     const { id } = req.params
-    const problem = await Problem.findByPk(id, {
+    const order = await Order.findByPk(id)
+    await order.destroy()
+    return res.json('Order deleted by admin')
+  }
+
+  async update(req, res) {
+    const { id } = req.params
+    console.log(req.body)
+    // const { courier_id, recipient_id, product } = req.body
+    const order = await Order.findByPk(id)
+    await order.update(req.body)
+    const _order = await Order.findByPk(id, {
       include: [
         {
-          model: Order,
-          as: 'order',
-          attributes: ['id', 'courier_id']
-        }
-      ]
+          model: Recipient,
+          as: 'recipient',
+          attributes: ['id', 'name', 'street', 'state', 'city'],
+        },
+        {
+          model: Courier,
+          as: 'courier',
+          attributes: ['id', 'name', 'email'],
+        },
+      ],
     })
-
-    const courier = await Courier.findByPk(problem.order.courier_id)
-    const order = await Order.findByPk(problem.order_id)
-    await problem.destroy()
-    await order.destroy()
-
-    await Mail.sendMail({
-      to: `${courier.name} <${courier.email}>`,
-      subject: 'Cancelled Order By Admin',
-      template: 'cancellation',
-      context: {
-        courier: courier.name,
-        id: problem.order_id,
-        date: new Date()
-      }
-    })
-
-    return res.json({ success: 'order was succesfully deleted' })
+    return res.json(_order)
   }
 }
 
