@@ -1,8 +1,8 @@
-import React, { useState, useEffect, useMemo } from 'react'
+import React, { useState, useEffect } from 'react'
 import api from '~/services/api'
 import history from '~/services/history'
-import { Container, Table, Controls } from './styles'
-import { MdMoreHoriz, MdAdd } from 'react-icons/md'
+import { Container, Table, Controls, Modal } from './styles'
+import { MdMoreHoriz, MdAdd, MdEdit, MdDelete } from 'react-icons/md'
 
 export default function Recipients() {
   const [recipients, setRecipients] = useState([])
@@ -11,23 +11,39 @@ export default function Recipients() {
   useEffect(() => {
     async function loadRecipients() {
       const response = await api.get(`recipients?name=${query}`)
-      setRecipients(response.data)
+      const formatted = response.data.map((r) => ({
+        id: r.id,
+        name: r.name,
+        modal: false,
+        address: `${r.street} ${r.city}, ${r.state}, ${r.zip}`,
+      }))
+
+      setRecipients(formatted)
     }
     loadRecipients()
   }, [query])
 
-  const formattedRecipient = useMemo(
-    () =>
-      recipients.map((r) => ({
-        id: r.id,
-        name: r.name,
-        address: `${r.street} ${r.city}, ${r.state}, ${r.zip}`,
-      })),
-    [recipients]
-  )
+  function handleNavigation(path, data = {}) {
+    history.push(`/recipient/${path}`)
+  }
 
-  function handleNavigation() {
-    history.push('/recipient/new')
+  async function handleDelete(recipient) {
+    // eslint-disable-next-line no-restricted-globals
+    const confirmation = confirm(
+      `Are you sure you want to delete ${recipient.name}`
+    )
+    if (confirmation) {
+      await api.delete(`/recipient/${recipient.id}`)
+      setRecipients(recipients.filter((r) => r.id !== recipient.id))
+    }
+  }
+
+  function handleModal(id) {
+    setRecipients(
+      recipients.map((order) =>
+        order.id === id ? { ...order, modal: !order.modal } : order
+      )
+    )
   }
 
   return (
@@ -42,7 +58,7 @@ export default function Recipients() {
             value={query}
           />
         </div>
-        <button onClick={handleNavigation}>
+        <button onClick={() => handleNavigation('new')}>
           <MdAdd color="#FFF" size={16} />
           Add
         </button>
@@ -58,7 +74,7 @@ export default function Recipients() {
           </tr>
         </thead>
         <tbody>
-          {formattedRecipient.map((recipient) => (
+          {recipients.map((recipient) => (
             <tr key={recipient.id}>
               <td>
                 <div>#{recipient.id}</div>
@@ -75,9 +91,29 @@ export default function Recipients() {
               </td>
               <td>
                 <div>
-                  <button>
+                  <button onClick={() => handleModal(recipient.id)}>
                     <MdMoreHoriz />
                   </button>
+                  <Modal modal={recipient.modal}>
+                    <ul>
+                      <li>
+                        <button
+                          onClick={() =>
+                            handleNavigation(recipient.id, recipient)
+                          }
+                        >
+                          <MdEdit color="#4D85EE" />
+                          Edit
+                        </button>
+                      </li>
+                      <li>
+                        <button onClick={() => handleDelete(recipient)}>
+                          <MdDelete color="#DE3B3B" />
+                          Delete
+                        </button>
+                      </li>
+                    </ul>
+                  </Modal>
                 </div>
               </td>
             </tr>

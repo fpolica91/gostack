@@ -17,6 +17,34 @@ export const Scroll = styled(PerfectScrollBar)`
   padding: 5px 20px;
 `
 
+export const Modal = styled.div`
+  display: ${(props) => (props.modal ? 'block' : 'none')};
+  position: absolute;
+  height: 120px;
+  width: 120px;
+  border: 1px solid #9999;
+  border-radius: 4px;
+  background: #ffffff 0% 0% no-repeat padding-box;
+  box-shadow: 0px 0px 2px #00000026;
+
+  ul {
+    list-style: none;
+    display: flex;
+    flex-direction: column;
+
+    li {
+      padding: 10px 0;
+      border-bottom: 1px solid #9999;
+      button {
+        display: flex;
+        svg {
+          margin-right: 2px;
+        }
+      }
+    }
+  }
+`
+
 export const Controls = styled.div`
   display: flex;
   justify-content: space-between;
@@ -71,9 +99,6 @@ export const Table = styled.table`
       td {
         color: #666666;
         padding: 12px;
-       
-        
-        
         button {
         border: 0;
         }
