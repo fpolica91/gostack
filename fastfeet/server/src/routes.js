@@ -30,6 +30,7 @@ routes.get('/couriers', CourierController.index)
 
 //Problems
 routes.get('/problems', ProblemController.index)
+routes.delete('/problemOrder/:id', ProblemController.delete)
 
 routes.post('/recipient', RecipientController.store)
 routes.put('/update/:id', RecipientController.update)

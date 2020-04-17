@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import api from '~/services/api'
-import { Container, Table } from './styles'
-import { MdMoreHoriz } from 'react-icons/md'
+import { Container, Table, Modal } from './styles'
+import { MdMoreHoriz, MdDelete, MdRemoveRedEye } from 'react-icons/md'
 
 export default function Problems() {
   const [problems, setProblems] = useState([])
@@ -9,10 +9,25 @@ export default function Problems() {
   useEffect(() => {
     async function loadProblems() {
       const response = await api.get(`problems`)
-      setProblems(response.data)
+      const problems = response.data.map((p) => ({
+        ...p,
+        modal: false,
+      }))
+      setProblems(problems)
     }
     loadProblems()
   }, [])
+
+  function handleModal(id) {
+    setProblems(
+      problems.map((p) => (p.id === id ? { ...p, modal: !p.modal } : p))
+    )
+  }
+
+  async function handleDelete(id) {
+    await api.delete(`/problemOrder/${id}`)
+    setProblems(problems.filter((p) => p.id !== id))
+  }
 
   return (
     <Container>
@@ -37,9 +52,25 @@ export default function Problems() {
               </td>
               <td>
                 <div>
-                  <button>
+                  <button onClick={() => handleModal(problem.id)}>
                     <MdMoreHoriz />
                   </button>
+                  <Modal modal={problem.modal}>
+                    <ul>
+                      <li>
+                        <button>
+                          <MdRemoveRedEye color="#8E5BE8" />
+                          See
+                        </button>
+                      </li>
+                      <li>
+                        <button onClick={() => handleDelete(problem.id)}>
+                          <MdDelete color="#DE3B3B" />
+                          Delete
+                        </button>
+                      </li>
+                    </ul>
+                  </Modal>
                 </div>
               </td>
             </tr>

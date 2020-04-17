@@ -9,7 +9,7 @@ import GlobalStyle from './styles/global'
 import Routes from './Routes/index'
 import history from './services/history'
 
-function App() {
+function App  () {
   return (
     <>
       <Provider store={store}>
@@ -24,5 +24,7 @@ function App() {
     </>
   )
 }
+
+
 
 export default App

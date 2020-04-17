@@ -1,8 +1,9 @@
+/* eslint-disable no-restricted-globals */
 import React, { useState, useEffect } from 'react'
 import api from '~/services/api'
 import history from '~/services/history'
-import { Container, Table, Controls, Avatar } from './styles'
-import { MdMoreHoriz, MdAdd } from 'react-icons/md'
+import { Container, Table, Controls, Avatar, Modal } from './styles'
+import { MdMoreHoriz, MdAdd, MdEdit, MdDelete } from 'react-icons/md'
 
 export default function Couriers() {
   const [couriers, setCouriers] = useState([])
@@ -11,9 +12,10 @@ export default function Couriers() {
   useEffect(() => {
     async function loadCouriers() {
       const response = await api.get(`/couriers?name=${query}`)
-      const courierList = response.data.map(courier => ({
+      const courierList = response.data.map((courier) => ({
         ...courier,
-        image: courier.avatar ? courier.avatar.url : null
+        modal: false,
+        image: courier.avatar ? courier.avatar.url : null,
       }))
       setCouriers(courierList)
     }
@@ -24,6 +26,22 @@ export default function Couriers() {
     history.push('courier/new')
   }
 
+  function handleModal(id) {
+    setCouriers(
+      couriers.map((c) => (c.id === id ? { ...c, modal: !c.modal } : c))
+    )
+  }
+
+  async function handleDelete(id) {
+    const confirmDelete = confirm(
+      'Are you sure you want to delete this courier'
+    )
+    if (confirmDelete) {
+      await api.delete(`/couriers/${id}`)
+      setCouriers(couriers.filter((c) => c.id !== id))
+    }
+  }
+
   return (
     <Container>
       <Controls>
@@ -32,7 +50,7 @@ export default function Couriers() {
           <input
             type="text"
             value={query}
-            onChange={e => setQuery(e.target.value)}
+            onChange={(e) => setQuery(e.target.value)}
             placeholder="Search orders"
           />
         </div>
@@ -53,7 +71,7 @@ export default function Couriers() {
           </tr>
         </thead>
         <tbody>
-          {couriers.map(courier => (
+          {couriers.map((courier) => (
             <tr key={courier.id}>
               <td>
                 <div>{courier.id}</div>
@@ -81,9 +99,27 @@ export default function Couriers() {
               </td>
               <td>
                 <div>
-                  <span>
+                  <button onClick={() => handleModal(courier.id)}>
                     <MdMoreHoriz />
-                  </span>
+                  </button>
+                  <Modal modal={courier.modal}>
+                    <ul>
+                      <li>
+                        <button  onClick={()=> history.push(`/courier/edit/${courier.id}`, {
+                          courier
+                        })} >
+                          <MdEdit color="#4D85EE" />
+                          Edit
+                        </button>
+                      </li>
+                      <li>
+                        <button onClick={() => handleDelete(courier.id)}>
+                          <MdDelete color="#DE3B3B" />
+                          Delete
+                        </button>
+                      </li>
+                    </ul>
+                  </Modal>
                 </div>
               </td>
             </tr>

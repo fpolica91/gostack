@@ -24,7 +24,7 @@ export default function Recipients() {
   }, [query])
 
   function handleNavigation(path, data = {}) {
-    history.push(`/recipient/${path}`)
+    history.push(`/recipient/${path}`, data)
   }
 
   async function handleDelete(recipient) {
@@ -99,7 +99,7 @@ export default function Recipients() {
                       <li>
                         <button
                           onClick={() =>
-                            handleNavigation(recipient.id, recipient)
+                            handleNavigation(recipient.id, { recipient })
                           }
                         >
                           <MdEdit color="#4D85EE" />

@@ -9,6 +9,4 @@ export default function DefaultLayout({ children }) {
       {children}
     </Container>
   )
-  
- 
 }

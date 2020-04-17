@@ -81,36 +81,6 @@ class OrderController {
       product,
     })
   }
-  // async delete(req, res) {
-  //   const { id } = req.params
-  //   const problem = await Problem.findByPk(id, {
-  //     include: [
-  //       {
-  //         model: Order,
-  //         as: 'order',
-  //         attributes: ['id', 'courier_id'],
-  //       },
-  //     ],
-  //   })
-
-  //   const courier = await Courier.findByPk(problem.order.courier_id)
-  //   const order = await Order.findByPk(problem.order_id)
-  //   await problem.destroy()
-  //   await order.destroy()
-
-  //   await Mail.sendMail({
-  //     to: `${courier.name} <${courier.email}>`,
-  //     subject: 'Cancelled Order By Admin',
-  //     template: 'cancellation',
-  //     context: {
-  //       courier: courier.name,
-  //       id: problem.order_id,
-  //       date: new Date(),
-  //     },
-  //   })
-
-  //   return res.json({ success: 'order was succesfully deleted' })
-  // }
 
   async delete(req, res) {
     const { id } = req.params

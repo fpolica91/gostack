@@ -9,10 +9,8 @@ class CourierController {
   async store(req, res) {
     const schema = Yup.object().shape({
       name: Yup.string().required(),
-      email: Yup.string()
-        .email()
-        .required(),
-      file_id: Yup.number()
+      email: Yup.string().email().required(),
+      file_id: Yup.number(),
     })
 
     const isAdmin = await User.findByPk(req.userId)
@@ -27,7 +25,7 @@ class CourierController {
       return res.status(401).json({ err: 'Validation error' })
     }
     const courierExists = await Courier.findOne({
-      where: { email }
+      where: { email },
     })
 
     if (courierExists) {
@@ -48,7 +46,7 @@ class CourierController {
     const schema = Yup.object().shape({
       name: Yup.string(),
       email: Yup.string().email(),
-      file_id: Yup.number()
+      file_id: Yup.number(),
     })
 
     const { email, file_id } = req.body
@@ -85,7 +83,7 @@ class CourierController {
     return res.json({
       id,
       email,
-      name
+      name,
     })
   }
   // DELETE
@@ -107,18 +105,18 @@ class CourierController {
     const couriers = await Courier.findAll({
       where: {
         name: {
-          [Op.iLike]: `%${name}%`
-        }
+          [Op.iLike]: `%${name}%`,
+        },
       },
       include: [
         {
           model: File,
           as: 'avatar',
-          attributes: ['name', 'path', 'url']
-        }
+          attributes: ['id', 'name', 'path', 'url'],
+        },
       ],
       attributes: ['id', 'name', 'email'],
-      order: ['id']
+      order: ['id'],
     })
     return res.json(couriers)
   }
